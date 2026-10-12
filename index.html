@@ -613,22 +613,85 @@
   let lastMessage = -1;
   let pressCount = 0;
   let decodeTimer;
+  let darkClicks = 0;
+
+  const horrorMessages = [
+    "I SEE YOU.",
+    "DON'T LOOK BEHIND YOU.",
+    "WHY DID YOU COME BACK?",
+    "YOU WERE WARNED.",
+    "I CAN SEE YOUR SCREEN.",
+    "THIS CONNECTION IS NOT YOURS.",
+    "TURN AROUND.",
+    "I'M STILL HERE.",
+    "DON'T CLOSE YOUR EYES."
+  ];
 
   button.addEventListener("click", () => {
     pressCount++;
 
-    // PRESS 15 TIMES THE WIRED GOES DARK
+    // press 15 times goes dark
     if (pressCount >= 15) {
       clearTimeout(decodeTimer);
 
       document.body.innerHTML = "";
       document.body.style.background = "#000";
+      document.body.style.minHeight = "100vh";
+      document.body.style.cursor = "crosshair";
       document.documentElement.style.background = "#000";
       document.title = " ";
+
+      // enable dark screen
+      setTimeout(() => {
+        document.body.addEventListener("click", () => {
+          darkClicks++;
+
+          // 10 dark screen click enters the secret page
+          if (darkClicks >= 10) {
+            window.location.href = "secret.html";
+            return;
+          }
+
+          // random horor message
+          const message =
+            horrorMessages[
+              Math.floor(Math.random() * horrorMessages.length)
+            ];
+
+          document.body.innerHTML = "";
+
+          const scare = document.createElement("div");
+          scare.textContent = message;
+
+          scare.style.position = "fixed";
+          scare.style.inset = "0";
+          scare.style.display = "flex";
+          scare.style.alignItems = "center";
+          scare.style.justifyContent = "center";
+          scare.style.padding = "25px";
+          scare.style.background = "#000";
+          scare.style.color = "#f05bff";
+          scare.style.fontFamily = '"Courier New", monospace';
+          scare.style.fontSize = "clamp(20px, 5vw, 42px)";
+          scare.style.letterSpacing = "4px";
+          scare.style.textAlign = "center";
+          scare.style.textShadow = "0 0 15px #f05bff";
+          scare.style.animation = "wiredGlitch .15s infinite";
+          scare.style.pointerEvents = "none";
+
+          document.body.appendChild(scare);
+
+          // remobe message, return to dsarkness
+          setTimeout(() => {
+            scare.remove();
+          }, 1200);
+        });
+      }, 0);
+
       return;
     }
 
-    // PRESSES 10–14 TIMES FATAL ERROR
+    // press 10 times fatal error
     if (pressCount >= 10) {
       clearTimeout(decodeTimer);
 
@@ -642,7 +705,7 @@
       return;
     }
 
-    // NORMAL TRANSMISSION
+    // normal transmission
     clearTimeout(decodeTimer);
 
     let next;
@@ -664,6 +727,30 @@
       button.textContent = "DECODE ANOTHER SIGNAL";
     }, 650);
   });
+
+  // glitch animation for horror messagw
+  const glitchStyle = document.createElement("style");
+  glitchStyle.textContent = `
+    @keyframes wiredGlitch {
+      0%, 100% {
+        opacity: 1;
+        transform: translate(0);
+      }
+      25% {
+        opacity: .7;
+        transform: translate(2px, -1px);
+      }
+      50% {
+        opacity: 1;
+        transform: translate(-2px, 1px);
+      }
+      75% {
+        opacity: .85;
+        transform: translate(1px, 2px);
+      }
+    }
+  `;
+  document.head.appendChild(glitchStyle);
   </script>
 </body>
 </html>
