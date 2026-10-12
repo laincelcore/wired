@@ -599,38 +599,71 @@
   </footer>
 
   <script>
-    const output = document.getElementById("terminal-output");
-    const button = document.getElementById("decode");
+  const output = document.getElementById("terminal-output");
+  const button = document.getElementById("decode");
 
-    const messages = [
-      "Signal decoded.\nYou are not the only one online.",
-      "Unknown sender detected.\nThe network remembers everything.",
-      "Connection unstable.\nReality check: inconclusive.",
-      "Packet received.\nAre you sure you are alone?",
-      "Transmission complete.\nSee you on the other side."
-    ];
+  const messages = [
+    "Signal decoded.\nYou are not the only one online.",
+    "Unknown sender detected.\nThe network remembers everything.",
+    "Connection unstable.\nReality check: inconclusive.",
+    "Packet received.\nAre you sure you are alone?",
+    "Transmission complete.\nSee you on the other side."
+  ];
 
-    let lastMessage = -1;
+  let lastMessage = -1;
+  let pressCount = 0;
+  let decodeTimer;
 
-    button.addEventListener("click", () => {
-      let next;
+  button.addEventListener("click", () => {
+    pressCount++;
 
-      do {
-        next = Math.floor(Math.random() * messages.length);
-      } while (next === lastMessage && messages.length > 1);
+    // PRESS 15 TIMES THE WIRED GOES DARK
+    if (pressCount >= 15) {
+      clearTimeout(decodeTimer);
 
-      lastMessage = next;
-      output.textContent = "> decoding...\n";
+      document.body.innerHTML = "";
+      document.body.style.background = "#000";
+      document.documentElement.style.background = "#000";
+      document.title = " ";
+      return;
+    }
 
-      button.disabled = true;
-      button.textContent = "DECODING...";
+    // PRESSES 10–14 TIMES FATAL ERROR
+    if (pressCount >= 10) {
+      clearTimeout(decodeTimer);
 
-      setTimeout(() => {
-        output.textContent = "> " + messages[next] + "\n\n> END OF TRANSMISSION";
-        button.disabled = false;
-        button.textContent = "DECODE ANOTHER SIGNAL";
-      }, 650);
-    });
+      output.textContent =
+        "FATAL ERROR: 0x00000404\n\n" +
+        "CONNECTION TERMINATED.\n" +
+        "YOU WERE WARNED.\n\n" +
+        "> DO NOT TRY AGAIN.";
+
+      button.textContent = "DO NOT TRY AGAIN";
+      return;
+    }
+
+    // NORMAL TRANSMISSION
+    clearTimeout(decodeTimer);
+
+    let next;
+
+    do {
+      next = Math.floor(Math.random() * messages.length);
+    } while (next === lastMessage && messages.length > 1);
+
+    lastMessage = next;
+
+    output.textContent = "> decoding...";
+    button.textContent = "DECODING...";
+
+    decodeTimer = setTimeout(() => {
+      output.textContent =
+        "> " + messages[next] + "\n\n" +
+        "> END OF TRANSMISSION";
+
+      button.textContent = "DECODE ANOTHER SIGNAL";
+    }, 650);
+  });
   </script>
 </body>
 </html>
