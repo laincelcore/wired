@@ -1,0 +1,547 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#050706">
+  <title>WIRED//404 — Lost in the Network</title>
+
+  <style>
+    :root {
+      --bg: #050706;
+      --green: #a5ff00;
+      --pink: #f05bff;
+      --muted: #7d897b;
+      --panel: #0b100d;
+      --line: #263526;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: #e5eee4;
+      font-family: "Courier New", monospace;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      pointer-events: none;
+      opacity: .12;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent 3px,
+        #b5ffc0 4px
+      );
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .noise {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      background:
+        radial-gradient(ellipse at 75% 40%,
+          #32103c 0%, transparent 40%),
+        radial-gradient(ellipse at 15% 80%,
+          #163009 0%, transparent 35%);
+    }
+
+    nav {
+      position: relative;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 7%;
+      border-bottom: 1px solid var(--line);
+      background: #050706dd;
+    }
+
+    .logo {
+      color: var(--green);
+      font-weight: bold;
+      letter-spacing: 3px;
+      text-shadow: 0 0 12px #a5ff0066;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 25px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .nav-links a:hover {
+      color: var(--pink);
+    }
+
+    .hero {
+      min-height: 84vh;
+      padding: 90px 7% 75px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+    }
+
+    .status {
+      font-size: 11px;
+      color: var(--green);
+      letter-spacing: 2px;
+      margin-bottom: 32px;
+    }
+
+    .status::before {
+      content: "● ";
+      animation: blink 1s steps(2) infinite;
+    }
+
+    h1 {
+      font-size: clamp(48px, 10vw, 115px);
+      line-height: .88;
+      letter-spacing: -7px;
+      color: #edf5eb;
+      text-shadow: 4px 0 var(--pink), -3px 0 #a5ff0066;
+      margin-bottom: 30px;
+      animation: flicker 5s infinite;
+    }
+
+    h1 span {
+      display: block;
+      color: var(--green);
+      font-size: .42em;
+      letter-spacing: 5px;
+      margin-top: 22px;
+      text-shadow: 0 0 20px #a5ff0055;
+    }
+
+    .intro {
+      color: #a0a99e;
+      font-size: 13px;
+      line-height: 2;
+      max-width: 520px;
+    }
+
+    .intro em {
+      color: var(--pink);
+      font-style: normal;
+    }
+
+    .actions {
+      display: flex;
+      gap: 14px;
+      margin-top: 35px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      border: 1px solid var(--green);
+      color: var(--green);
+      padding: 14px 20px;
+      font: inherit;
+      font-size: 11px;
+      background: transparent;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .btn:hover {
+      background: var(--green);
+      color: #050706;
+      box-shadow: 0 0 22px #a5ff0044;
+    }
+
+    .btn.alt {
+      border-color: var(--pink);
+      color: var(--pink);
+    }
+
+    .btn.alt:hover {
+      background: var(--pink);
+      color: #100712;
+      box-shadow: 0 0 22px #f05bff44;
+    }
+
+    .side-code {
+      position: absolute;
+      right: 7%;
+      top: 42%;
+      writing-mode: vertical-rl;
+      color: #52614c;
+      font-size: 10px;
+      letter-spacing: 3px;
+    }
+
+    .divider {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 14px 7%;
+      border-block: 1px solid var(--line);
+      color: var(--green);
+      font-size: 10px;
+      letter-spacing: 1px;
+    }
+
+    section.content {
+      padding: 85px 7%;
+    }
+
+    .eyebrow {
+      color: var(--pink);
+      font-size: 11px;
+      letter-spacing: 3px;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      font-size: clamp(27px, 5vw, 43px);
+      margin-bottom: 20px;
+      font-weight: normal;
+    }
+
+    .description {
+      max-width: 600px;
+      color: #929d90;
+      font-size: 13px;
+      line-height: 2;
+      margin-bottom: 35px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      background: #090d0a;
+      padding: 25px 20px;
+      min-height: 190px;
+      transition: .25s;
+    }
+
+    .card:hover {
+      border-color: var(--pink);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px #f05bff0c;
+    }
+
+    .card .number {
+      color: var(--green);
+      font-size: 12px;
+      margin-bottom: 30px;
+    }
+
+    .card h3 {
+      color: var(--pink);
+      font-size: 15px;
+      margin-bottom: 13px;
+    }
+
+    .card p {
+      color: #899287;
+      font-size: 12px;
+      line-height: 1.9;
+    }
+
+    .terminal {
+      border: 1px solid #334b2d;
+      background: #080d08;
+      padding: 25px;
+      max-width: 700px;
+      box-shadow: 0 0 30px #a5ff0008;
+    }
+
+    .terminal-head {
+      color: var(--pink);
+      font-size: 11px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 15px;
+      margin-bottom: 20px;
+    }
+
+    #terminal-output {
+      min-height: 85px;
+      white-space: pre-wrap;
+      color: var(--green);
+      font-size: 12px;
+      line-height: 2;
+    }
+
+    .terminal button {
+      margin-top: 20px;
+    }
+
+    .quote {
+      border-left: 2px solid var(--pink);
+      padding: 12px 0 12px 24px;
+      margin-top: 35px;
+      color: #c5b4c7;
+      line-height: 2;
+      font-size: 13px;
+      max-width: 600px;
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 28px 7%;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 15px;
+      color: #687364;
+      font-size: 10px;
+      letter-spacing: 1px;
+    }
+
+    footer span {
+      color: var(--green);
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    @keyframes flicker {
+      0%, 94%, 96%, 100% { opacity: 1; }
+      95% { opacity: .65; }
+      97% { opacity: .85; }
+    }
+
+    @media (max-width: 700px) {
+      nav {
+        padding: 20px 5%;
+      }
+
+      .nav-links {
+        gap: 12px;
+        font-size: 9px;
+      }
+
+      .hero {
+        padding: 80px 6%;
+        min-height: 78vh;
+      }
+
+      h1 {
+        letter-spacing: -3px;
+      }
+
+      .side-code {
+        display: none;
+      }
+
+      .divider {
+        padding-inline: 6%;
+        font-size: 8px;
+      }
+
+      section.content {
+        padding: 65px 6%;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        min-height: auto;
+      }
+
+      .card .number {
+        margin-bottom: 18px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="noise"></div>
+
+  <nav>
+    <a href="#home" class="logo">WIRED<span>//</span>404</a>
+
+    <div class="nav-links">
+      <a href="#about">ABOUT</a>
+      <a href="#signals">SIGNALS</a>
+      <a href="#terminal">TERMINAL</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="status">CONNECTION ESTABLISHED</div>
+
+      <h1>
+        ARE YOU
+        <br>CONNECTED?
+        <span>WELCOME TO THE WIRED_</span>
+      </h1>
+
+      <p class="intro">
+        The boundary between reality and the network
+        is becoming <em>thinner.</em><br>
+        Your identity is a signal. Your existence is data.<br>
+        Tell me... are you really alone?
+      </p>
+
+      <div class="actions">
+        <a href="#terminal" class="btn">ENTER THE WIRED ↗</a>
+        <a href="#about" class="btn alt">READ TRANSMISSION</a>
+      </div>
+
+      <div class="side-code">
+        01010111 // NO CARRIER // 1999
+      </div>
+    </section>
+
+    <div class="divider">
+      <span>SYS.ONLINE</span>
+      <span>NO IDENTITY FOUND</span>
+      <span>∞ NETWORK ACTIVE</span>
+    </div>
+
+    <section class="content" id="about">
+      <div class="eyebrow">01 // THE OBSERVATION</div>
+      <h2>Where does reality end?</h2>
+
+      <p class="description">
+        Somewhere between the static and the silence,
+        a new world is waiting. Every message leaves a trace.
+        Every connection changes who we are.
+        Maybe the network was never separate from us.
+        Maybe we were always a part of it.
+      </p>
+
+      <div class="grid" id="signals">
+        <article class="card">
+          <div class="number">[ 001 ]</div>
+          <h3>THE NETWORK</h3>
+          <p>
+            An endless web of signals, memories and
+            forgotten conversations. Are you listening?
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="number">[ 002 ]</div>
+          <h3>THE SELF</h3>
+          <p>
+            Who are you when nobody is watching?
+            Does an online identity count as existence?
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="number">[ 003 ]</div>
+          <h3>THE UNKNOWN</h3>
+          <p>
+            Not every signal needs an explanation.
+            Some things are meant to remain unresolved.
+          </p>
+        </article>
+      </div>
+
+      <div class="quote">
+        "Maybe being connected is not the same as
+        being understood."
+      </div>
+    </section>
+
+    <section class="content" id="terminal">
+      <div class="eyebrow">02 // DIRECT CONNECTION</div>
+      <h2>Open a transmission.</h2>
+
+      <p class="description">
+        An unknown signal has been detected.
+        Press the button to decode its message.
+      </p>
+
+      <div class="terminal">
+        <div class="terminal-head">
+          root@wired:~$ listen --incoming-signal
+        </div>
+
+        <div id="terminal-output">
+          Waiting for incoming transmission...
+          <br>_
+        </div>
+
+        <button class="btn" id="decode">
+          DECODE SIGNAL [ ENTER ]
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div>WIRED//404 — <span>STAY CONNECTED.</span></div>
+    <div>AN ORIGINAL DIGITAL EXPERIMENT · 2026</div>
+  </footer>
+
+  <script>
+    const output = document.getElementById("terminal-output");
+    const button = document.getElementById("decode");
+
+    const messages = [
+      "Signal decoded.\nYou are not the only one online.",
+      "Unknown sender detected.\nThe network remembers everything.",
+      "Connection unstable.\nReality check: inconclusive.",
+      "Packet received.\nAre you sure you are alone?",
+      "Transmission complete.\nSee you on the other side."
+    ];
+
+    let lastMessage = -1;
+
+    button.addEventListener("click", () => {
+      let next;
+
+      do {
+        next = Math.floor(Math.random() * messages.length);
+      } while (next === lastMessage && messages.length > 1);
+
+      lastMessage = next;
+      output.textContent = "> decoding...\n";
+
+      button.disabled = true;
+      button.textContent = "DECODING...";
+
+      setTimeout(() => {
+        output.textContent = "> " + messages[next] + "\n\n> END OF TRANSMISSION";
+        button.disabled = false;
+        button.textContent = "DECODE ANOTHER SIGNAL";
+      }, 650);
+    });
+  </script>
+</body>
+</html>
