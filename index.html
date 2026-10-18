@@ -596,6 +596,225 @@ h1 {
   }
 }
 
+
+
+
+
+/* wired guestbook style */
+.guestbook {
+  max-width: 1000px;
+  margin: 100px auto;
+  padding: 30px 24px;
+  color: var(--green);
+  font-family: "Courier New", monospace;
+}
+
+.guestbook-header {
+  margin-bottom: 35px;
+}
+
+.guestbook-header .section-index {
+  color: var(--pink);
+  font-size: 11px;
+  letter-spacing: 3px;
+}
+
+.guestbook-header h2 {
+  margin: 15px 0;
+  font-size: clamp(30px, 6vw, 52px);
+  letter-spacing: -2px;
+}
+
+.guestbook-header h2 span {
+  color: var(--pink);
+  text-shadow: 0 0 15px #f05bff55;
+}
+
+.guestbook-header > p {
+  max-width: 600px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.9;
+}
+
+.guestbook-panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  padding: 22px;
+  box-shadow: 0 0 25px #a5ff0008;
+}
+
+.guestbook-bar,
+.guestbook-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.guestbook-bar {
+  padding-bottom: 15px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--line);
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--pink);
+}
+
+#guestbook-form label {
+  display: block;
+  margin: 20px 0 10px;
+  font-size: 11px;
+  letter-spacing: 2px;
+}
+
+#guestbook-form input,
+#guestbook-form textarea {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 14px;
+  background: #050706;
+  color: var(--green);
+  border: 1px solid var(--line);
+  border-radius: 0;
+  font: inherit;
+  font-size: 13px;
+  outline: none;
+}
+
+#guestbook-form input:focus,
+#guestbook-form textarea:focus {
+  border-color: var(--pink);
+  box-shadow: 0 0 12px #f05bff20;
+}
+
+#guestbook-form textarea {
+  resize: vertical;
+  line-height: 1.7;
+}
+
+#guestbook-form input::placeholder,
+#guestbook-form textarea::placeholder {
+  color: #596456;
+}
+
+#guestbook-submit {
+  margin-top: 18px;
+  padding: 13px 18px;
+  background: var(--green);
+  color: #050706;
+  border: 1px solid var(--green);
+  font: inherit;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: .2s;
+}
+
+#guestbook-submit:hover {
+  background: transparent;
+  color: var(--green);
+  box-shadow: 0 0 15px #a5ff0022;
+}
+
+#guestbook-submit:disabled {
+  opacity: .5;
+  cursor: wait;
+}
+
+#guestbook-status {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.guestbook-messages {
+  margin-top: 45px;
+}
+
+.guestbook-list-header {
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--line);
+}
+
+.guestbook-list-header h3 {
+  font-size: 13px;
+  letter-spacing: 2px;
+}
+
+#guestbook-count {
+  color: var(--pink);
+  font-size: 10px;
+}
+
+#guestbook-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.guestbook-entry {
+  padding: 18px;
+  background: #080d08;
+  border: 1px solid var(--line);
+  overflow-wrap: anywhere;
+}
+
+.guestbook-entry-top {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 13px;
+}
+
+.guestbook-entry-name {
+  color: var(--pink);
+  font-size: 12px;
+}
+
+.guestbook-entry-date {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.guestbook-entry-message {
+  margin: 0;
+  color: #c1cdbd;
+  font-size: 13px;
+  line-height: 1.9;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.guestbook-empty {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+@media (max-width: 700px) {
+  .guestbook {
+    margin: 55px auto;
+    padding: 20px 16px;
+  }
+
+  .guestbook-panel {
+    padding: 16px;
+  }
+
+  .guestbook-bar {
+    font-size: 9px;
+  }
+}
+
+
+
+    
   </style>
 </head>
 
@@ -785,6 +1004,72 @@ h1 {
     </section>
   </main>
 
+
+
+
+<!-- wired guestbook -->
+<section id="guestbook" class="guestbook">
+  <div class="guestbook-header">
+    <span class="section-index">03 // OPEN TRANSMISSIONS</span>
+    <h2>LEAVE A <span>TRACE.</span></h2>
+    <p>
+      You found this little corner of the Wired.
+      Leave a message behind. Your name is optional.
+    </p>
+  </div>
+
+  <div class="guestbook-panel">
+    <div class="guestbook-bar">
+      <span>● CONNECTION ACTIVE</span>
+      <span>ANONYMOUS ACCESS ENABLED</span>
+    </div>
+
+    <form id="guestbook-form">
+      <label for="guest-name">IDENTITY // OPTIONAL</label>
+      <input
+        id="guest-name"
+        type="text"
+        maxlength="40"
+        placeholder="ANONYMOUS"
+        autocomplete="off"
+      >
+
+      <label for="guest-message">YOUR TRANSMISSION</label>
+      <textarea
+        id="guest-message"
+        maxlength="500"
+        rows="4"
+        placeholder="say something"
+        required
+      ></textarea>
+
+      <button type="submit" id="guestbook-submit">
+        SEND TRANSMISSION ↗
+      </button>
+
+      <p id="guestbook-status" role="status" aria-live="polite">
+        root@wired:~$ awaiting_input
+      </p>
+    </form>
+  </div>
+
+  <div class="guestbook-messages">
+    <div class="guestbook-list-header">
+      <h3>RECEIVED SIGNALS</h3>
+      <span id="guestbook-count">LOADING...</span>
+    </div>
+
+    <div id="guestbook-list" aria-live="polite">
+      <p class="guestbook-empty">Connecting to the network...</p>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+  
   <footer>
     <div>WIRED//404 — <span>STAY CONNECTED.</span></div>
     <div>AN ORIGINAL DIGITAL EXPERIMENT · 2026</div>
