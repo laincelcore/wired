@@ -545,12 +545,76 @@ h1 {
     animation: none !important;
   }
 }
+
+
+
+
+/* lets all love lain moving */
+.lain-ticker {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  background: #080d08;
+  border-bottom: 1px solid #263526;
+  color: #a5ff00;
+  font-family: "Courier New", monospace;
+  font-size: 11px;
+  letter-spacing: 3px;
+  padding: 12px 0;
+  position: relative;
+  z-index: 30;
+}
+
+.lain-ticker-track {
+  display: inline-flex;
+  width: max-content;
+  animation: lainTickerScroll 18s linear infinite;
+}
+
+.lain-ticker-track span {
+  padding-right: 55px;
+}
+
+.lain-ticker .ticker-pink {
+  color: #f05bff;
+  text-shadow: 0 0 8px #f05bff66;
+}
+
+@keyframes lainTickerScroll {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100vw);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lain-ticker-track {
+    animation: none;
+    transform: none;
+  }
+}
+
   </style>
 </head>
 
 <body>
   <div class="noise"></div>
 
+
+
+  <!-- moving lall -->
+  <div class="lain-ticker" aria-label="Let's all love Lain">
+    <div class="lain-ticker-track">
+      <span>✳ LET'S ALL LOVE LAIN <span class="ticker-pink">//</span> PRESENT DAY, PRESENT TIME ✳</span>
+      <span>✳ LET'S ALL LOVE LAIN <span class="ticker-pink">//</span> PRESENT DAY, PRESENT TIME ✳</span>
+      <span>✳ LET'S ALL LOVE LAIN <span class="ticker-pink">//</span> PRESENT DAY, PRESENT TIME ✳</span>
+    </div>
+  </div>
+
+  <nav>
+  
   <nav>
     <a href="#home" class="logo">WIRED<span>//</span>484</a>
 
