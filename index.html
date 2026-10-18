@@ -1062,6 +1062,8 @@ h1 {
     <div id="guestbook-list" aria-live="polite">
       <p class="guestbook-empty">Connecting to the network...</p>
     </div>
+    
+
   </div>
 </section>
 
@@ -1300,5 +1302,116 @@ h1 {
     startTyping();
   }
   </script>
+
+
+<!-- Wired guestbook connect -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(() => {
+  const SUPABASE_URL = "https://ggumqploopkybcgfrddr.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_Oek8vJAhiBoBuIQkY1x_Zg_5JeDC6tW";
+
+  const form = document.getElementById("guestbook-form");
+  const nameInput = document.getElementById("guest-name");
+  const messageInput = document.getElementById("guest-message");
+  const submitButton = document.getElementById("guestbook-submit");
+  const status = document.getElementById("guestbook-status");
+  const list = document.getElementById("guestbook-list");
+  const count = document.getElementById("guestbook-count");
+
+  if (!form || !window.supabase) return;
+
+  const db = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+  async function loadMessages() {
+    const { data, error } = await db
+      .from("guestbook")
+      .select("id, name, message, created_at")
+      .order("created_at", { ascending: false })
+      .limit(50);
+
+    if (error) {
+      list.textContent = "CONNECTION ERROR // Check your database setup.";
+      count.textContent = "OFFLINE";
+      return;
+    }
+
+    list.replaceChildren();
+    count.textContent = `${data.length} SIGNAL${data.length === 1 ? "" : "S"}`;
+
+    if (data.length === 0) {
+      const empty = document.createElement("p");
+      empty.className = "guestbook-empty";
+      empty.textContent = "No transmissions yet. Be the first to leave a trace.";
+      list.appendChild(empty);
+      return;
+    }
+
+    data.forEach(entry => {
+      const card = document.createElement("article");
+      card.className = "guestbook-entry";
+
+      const top = document.createElement("div");
+      top.className = "guestbook-entry-top";
+
+      const author = document.createElement("span");
+      author.className = "guestbook-entry-name";
+      author.textContent = "// " + entry.name;
+
+      const date = document.createElement("span");
+      date.className = "guestbook-entry-date";
+      date.textContent = new Date(entry.created_at).toLocaleDateString();
+
+      const message = document.createElement("p");
+      message.className = "guestbook-entry-message";
+      message.textContent = entry.message;
+
+      top.append(author, date);
+      card.append(top, message);
+      list.appendChild(card);
+    });
+  }
+
+  form.addEventListener("submit", async event => {
+    event.preventDefault();
+
+    const name = nameInput.value.trim() || "ANONYMOUS";
+    const message = messageInput.value.trim();
+
+    if (!message || name.length > 40 || message.length > 500) {
+      status.textContent = "INVALID TRANSMISSION.";
+      return;
+    }
+
+    submitButton.disabled = true;
+    status.textContent = "TRANSMITTING SIGNAL...";
+
+    try {
+      const { error } = await db
+        .from("guestbook")
+        .insert([{ name, message }]);
+
+      if (error) throw error;
+
+      form.reset();
+      status.textContent = "SIGNAL RECEIVED. THANK YOU FOR LEAVING A TRACE.";
+      await loadMessages();
+    } catch (error) {
+      console.error("Guestbook error:", error);
+      status.textContent = "TRANSMISSION FAILED. Check your database setup.";
+    } finally {
+      submitButton.disabled = false;
+    }
+  });
+
+  loadMessages();
+})();
+</script>
+
+
+  
 </body>
 </html>
