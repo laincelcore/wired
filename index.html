@@ -814,6 +814,43 @@ h1 {
 
 
 
+
+/* msic button*/
+.music-toggle {
+  background: #050706;
+  color: #a5ff00;
+  border: 1px solid #a5ff00;
+  padding: 10px 14px;
+  font-family: "Courier New", monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.music-toggle:hover {
+  color: #f05bff;
+  border-color: #f05bff;
+  box-shadow: 0 0 15px #f05bff66;
+}
+
+.music-toggle.playing {
+  color: #f05bff;
+  border-color: #f05bff;
+  animation: wired-pulse 1s infinite alternate;
+}
+
+@keyframes wired-pulse {
+  from { box-shadow: 0 0 3px #f05bff44; }
+  to { box-shadow: 0 0 15px #f05bff99; }
+}
+
+
+
+
+
+
+    
     
   </style>
 </head>
@@ -840,6 +877,19 @@ h1 {
 
   
   <nav>
+
+
+
+    
+
+<button id="music-toggle" class="music-toggle">
+  ♫ <span id="music-label">AUDIO: OFF</span>
+</button>
+
+
+
+    
+    
     <a href="#home" class="logo">WIRED<span>//</span>484</a>
 
     <div class="nav-links">
@@ -1409,6 +1459,157 @@ h1 {
 
   loadMessages();
 })();
+
+
+
+
+
+
+// music
+const musicButton = document.getElementById("music-toggle");
+const musicLabel = document.getElementById("music-label");
+
+let audioContext;
+let masterVolume;
+let musicPlaying = false;
+let musicTimer;
+let noteIndex = 0;
+let oscillators = [];
+
+const notes = [
+  220, 261.63, 329.63, 293.66,
+  196, 246.94, 164.81, 220
+];
+
+function playNote() {
+  if (!musicPlaying) return;
+
+  const osc = audioContext.createOscillator();
+  const volume = audioContext.createGain();
+  const now = audioContext.currentTime;
+
+  osc.type = "sine";
+  osc.frequency.value = notes[noteIndex % notes.length];
+
+  volume.gain.setValueAtTime(0.0001, now);
+  volume.gain.exponentialRampToValueAtTime(0.035, now + 0.2);
+  volume.gain.exponentialRampToValueAtTime(0.0001, now + 2.8);
+
+  osc.connect(volume);
+  volume.connect(masterVolume);
+
+  osc.start(now);
+  osc.stop(now + 3);
+
+  noteIndex++;
+  musicTimer = setTimeout(playNote, 1700);
+}
+
+async function startMusic() {
+  const AudioContextClass =
+    window.AudioContext || window.webkitAudioContext;
+
+  if (!AudioContextClass) {
+    musicLabel.textContent = "AUDIO UNSUPPORTED";
+    return;
+  }
+
+  if (!audioContext) {
+    audioContext = new AudioContextClass();
+  }
+
+  await audioContext.resume();
+
+  musicPlaying = true;
+
+  masterVolume = audioContext.createGain();
+  masterVolume.gain.value = 0.12;
+  masterVolume.connect(audioContext.destination);
+
+  //  electronic drone
+  const drone1 = audioContext.createOscillator();
+  const gain1 = audioContext.createGain();
+
+  drone1.type = "sine";
+  drone1.frequency.value = 55;
+  gain1.gain.value = 0.32;
+
+  drone1.connect(gain1);
+  gain1.connect(masterVolume);
+  drone1.start();
+
+  //  eerie frequency
+  const drone2 = audioContext.createOscillator();
+  const gain2 = audioContext.createGain();
+
+  drone2.type = "triangle";
+  drone2.frequency.value = 82.41;
+  gain2.gain.value = 0.09;
+
+  drone2.connect(gain2);
+  gain2.connect(masterVolume);
+  drone2.start();
+
+  oscillators = [drone1, drone2];
+
+  musicButton.classList.add("playing");
+  musicLabel.textContent = "AUDIO: ON";
+
+  playNote();
+}
+
+function stopMusic() {
+  musicPlaying = false;
+  clearTimeout(musicTimer);
+
+  if (masterVolume && audioContext) {
+    const oldVolume = masterVolume;
+
+    oldVolume.gain.setTargetAtTime(
+      0.0001,
+      audioContext.currentTime,
+      0.15
+    );
+
+    setTimeout(() => {
+      oscillators.forEach(osc => {
+        try {
+          osc.stop();
+          osc.disconnect();
+        } catch (error) {}
+      });
+
+      oscillators = [];
+      oldVolume.disconnect();
+    }, 800);
+  }
+
+  musicButton.classList.remove("playing");
+  musicLabel.textContent = "AUDIO: OFF";
+}
+
+musicButton.addEventListener("click", async () => {
+  try {
+    if (musicPlaying) {
+      stopMusic();
+    } else {
+      await startMusic();
+    }
+  } catch (error) {
+    musicLabel.textContent = "AUDIO ERROR";
+    console.error(error);
+  }
+});
+// end music
+
+
+
+
+
+
+
+
+  
 </script>
 
 
